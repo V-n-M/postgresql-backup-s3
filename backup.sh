@@ -65,9 +65,9 @@ SRC_FILE=dump.sql.gz
 DEST_FILE=${POSTGRES_DATABASE}_$(date +"%Y-%m-%dT%H:%M:%SZ").sql.gz
 
 if [ "${POSTGRES_DATABASE}" == "all" ]; then
-  pg_dumpall $POSTGRES_HOST_OPTS | gzip > $SRC_FILE
+  pg_dumpall $POSTGRES_HOST_OPTS -Fc > $SRC_FILE
 else
-  pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip > $SRC_FILE
+  pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE -Fc > $SRC_FILE
 fi
 
 
