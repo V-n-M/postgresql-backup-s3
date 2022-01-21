@@ -98,3 +98,13 @@ WARNING: this will delete all files in the S3_PREFIX path, not just those create
 ### Encryption
 
 You can additionally set the `ENCRYPTION_PASSWORD` environment variable like `-e ENCRYPTION_PASSWORD="superstrongpassword"` to encrypt the backup. It can be decrypted using `openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz`.
+
+### Restoring
+
+There is a restore script which you can use. It takes 2 arguments: 1. the target database to restore, and 2. (optional) which backup file from S3 to use for the restore. If you don't pass a second argument, the script will use the latest file stored in your S3 bucket.
+
+*Beware! This command will DROP the target database if it already exists!*
+To avoid bad situations, use a target database name that doesn't exist yet. Test if everything is right and then manually replace the restored db for the existing one.
+
+You can use the restore function through docker-compose like so:
+`docker-compose exec <containerId> restore.sh`
