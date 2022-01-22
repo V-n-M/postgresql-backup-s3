@@ -1,6 +1,6 @@
 # postgres-backup-s3
 
-Backup PostgresSQL to S3 (supports periodic backups)
+Backup PostgresSQL v14 databases to S3 (supports periodic backups)
 
 ## Basic Usage
 
