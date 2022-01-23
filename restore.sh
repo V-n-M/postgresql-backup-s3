@@ -97,7 +97,7 @@ echo "Creating new DB"
 PGPASSWORD=${POSTGRES_PASSWORD} createdb ${PG_CONN_PARAMETERS} -O ${POSTGRES_USER} ${TARGET_DB}
 
 echo "Restoring ${TARGET_BACKUP}"
-RESTORE_ARGS='-j 4'
+RESTORE_ARGS='-c -j 4'
 # Only works if the cluster is different- all the credentials are the same
 #psql -f /backups/globals.sql ${TARGET_DB}
 PGPASSWORD=${POSTGRES_PASSWORD} pg_restore ${PG_CONN_PARAMETERS} /home/app/backup/backup.dump -d ${TARGET_DB} ${RESTORE_ARGS}
