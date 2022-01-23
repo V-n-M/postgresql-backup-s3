@@ -107,4 +107,4 @@ There is a restore script which you can use. It takes 2 arguments: 1. the target
 To avoid bad situations, use a target database name that doesn't exist yet. Test if everything is right and then manually replace the restored db for the existing one.
 
 You can use the restore function through docker-compose like so:
-`docker-compose exec <containerId> restore.sh`
+`docker-compose exec <containerId> restore.sh <new database name>`
