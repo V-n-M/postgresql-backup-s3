@@ -11,6 +11,13 @@ fi
 TARGET_DB="$1"
 echo "TARGET_DB: ${TARGET_DB}"
 
+# env vars needed for aws tools
+export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
+export AWS_DEFAULT_REGION=$S3_REGION
+
+export PGPASSWORD=$POSTGRES_PASSWORD
+
 if [ -z "$2" ]; then
     echo "No S3 target provided. Finding latest backup instead"
     TARGET_BACKUP=$(aws $AWS_ARGS s3 ls s3://$S3_BUCKET/$S3_PREFIX/ | sort | tail -n 1 | awk '{ print $4 }')
@@ -71,12 +78,7 @@ else
     AWS_ARGS="--endpoint-url ${S3_ENDPOINT}"
 fi
 
-# env vars needed for aws tools
-export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
-export AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
-export AWS_DEFAULT_REGION=$S3_REGION
 
-export PGPASSWORD=$POSTGRES_PASSWORD
 #POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER"
 
 echo "Fetching ${TARGET_BACKUP} from S3"

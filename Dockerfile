@@ -1,5 +1,5 @@
 FROM alpine:3.15
-LABEL maintainer="ITBM"
+LABEL maintainer="voinik"
 
 RUN apk update \
 	&& apk add coreutils \
