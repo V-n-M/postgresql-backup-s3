@@ -85,7 +85,7 @@ echo "Fetching ${TARGET_BACKUP} from S3"
 aws $AWS_ARGS s3 cp s3://$S3_BUCKET/$S3_PREFIX/${TARGET_BACKUP} backup.sql.gz.enc
 
 echo "Decrypting backup file"
-openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz
+openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz -k $ENCRYPTION_PASSWORD
 
 echo "Unpacking backup file"
 gzip -d backup.sql.gz
