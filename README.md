@@ -97,7 +97,7 @@ WARNING: this will delete all files in the S3_PREFIX path, not just those create
 
 ### Encryption
 
-You can additionally set the `ENCRYPTION_PASSWORD` environment variable like `-e ENCRYPTION_PASSWORD="superstrongpassword"` to encrypt the backup. It can be decrypted using `openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz`.
+You can additionally set the `ENCRYPTION_PASSWORD` environment variable like `-e ENCRYPTION_PASSWORD="superstrongpassword"` to encrypt the backup. It can be decrypted using `gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output /home/app/backup/backup.dump --decrypt --cipher-algo AES256 /home/app/backup/backup.dump.enc`
 
 ### Restoring
 
