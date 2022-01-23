@@ -73,7 +73,6 @@ fi
 
 if [ "${ENCRYPTION_PASSWORD}" != "**None**" ]; then
   >&2 echo "Encrypting ${SRC_FILE}"
-  #openssl enc -aes-256-cbc -in $SRC_FILE -out ${SRC_FILE}.enc -k $ENCRYPTION_PASSWORD
   gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output /home/app/backup/${SRC_FILE}.enc --symmetric --cipher-algo AES256 /home/app/backup/${SRC_FILE}
   if [ $? != 0 ]; then
     >&2 echo "Error encrypting ${SRC_FILE}"

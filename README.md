@@ -80,7 +80,7 @@ spec:
 | S3_ENDPOINT          |           |          | The AWS Endpoint URL, for S3 Compliant APIs such as [minio](https://minio.io)                                            |
 | S3_S3V4              | no        |          | Set to `yes` to enable AWS Signature Version 4, required for [minio](https://minio.io) servers                           |
 | SCHEDULE             |           |          | Backup schedule time, see explainatons below                                                                             |
-| ENCRYPTION_PASSWORD  |           |          | Password to encrypt the backup. Can be decrypted using `openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz` |
+| ENCRYPTION_PASSWORD  |           |          | Password to encrypt the backup. Can be decrypted using `gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output backup.dump --decrypt --cipher-algo AES256 backup.dump.enc` |
 | DELETE_OLDER_THAN    |           |          | Delete old backups, see explanation and warning below                                                                    |
 
 ### Automatic Periodic Backups

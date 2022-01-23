@@ -79,13 +79,10 @@ else
 fi
 
 
-#POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER"
-
 echo "Fetching ${TARGET_BACKUP} from S3"
 aws $AWS_ARGS s3 cp s3://$S3_BUCKET/$S3_PREFIX/${TARGET_BACKUP} /home/app/backup/backup.dump.enc
 
 echo "Decrypting backup file"
-#openssl aes-256-cbc -d -in backup.sql.gz.enc -out backup.sql.gz -k $ENCRYPTION_PASSWORD
 gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output /home/app/backup/backup.dump --decrypt --cipher-algo AES256 /home/app/backup/backup.dump.enc
 
 PG_CONN_PARAMETERS="-h ${POSTGRES_HOST} -p ${POSTGRES_PORT} -U ${POSTGRES_USER}"
@@ -98,11 +95,8 @@ PGPASSWORD=${POSTGRES_PASSWORD} createdb ${PG_CONN_PARAMETERS} -O ${POSTGRES_USE
 
 echo "Restoring ${TARGET_BACKUP}"
 RESTORE_ARGS='-c --if-exists -j 4'
-# Only works if the cluster is different- all the credentials are the same
-#psql -f /backups/globals.sql ${TARGET_DB}
 PGPASSWORD=${POSTGRES_PASSWORD} pg_restore ${PG_CONN_PARAMETERS} /home/app/backup/backup.dump -d ${TARGET_DB} ${RESTORE_ARGS}
 
-# psql $POSTGRES_HOST_OPTS -d $POSTGRES_DATABASE < backup.sql
 echo "Restore complete"
 
 echo "Removing backups"
