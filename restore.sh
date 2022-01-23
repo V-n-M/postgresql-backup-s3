@@ -103,5 +103,8 @@ RESTORE_ARGS='-j 4'
 PGPASSWORD=${POSTGRES_PASSWORD} pg_restore ${PG_CONN_PARAMETERS} /home/app/backup/backup.dump -d ${TARGET_DB} ${RESTORE_ARGS}
 
 # psql $POSTGRES_HOST_OPTS -d $POSTGRES_DATABASE < backup.sql
-
 echo "Restore complete"
+
+echo "Removing backups"
+rm /home/app/backup/backup.dump
+rm /home/app/backup/backup.dump.enc

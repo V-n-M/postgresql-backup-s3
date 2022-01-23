@@ -109,5 +109,7 @@ if [ "${DELETE_OLDER_THAN}" != "**None**" ]; then
 fi
 
 echo "SQL backup finished"
+echo "Removing backup file"
+rm /home/app/backup/$SRC_FILE
 
 >&2 echo "-----"
