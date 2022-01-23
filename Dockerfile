@@ -1,5 +1,6 @@
 FROM alpine:3.15
 LABEL maintainer="voinik"
+WORKDIR /home/app
 
 RUN apk update \
 	&& apk add coreutils \

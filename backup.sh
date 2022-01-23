@@ -61,31 +61,31 @@ POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTG
 
 echo "Creating dump of ${POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
 
-SRC_FILE=dump.sql.gz
-DEST_FILE=${POSTGRES_DATABASE}_$(date +"%Y-%m-%dT%H:%M:%SZ").sql.gz
+SRC_FILE=backup.dump
+DEST_FILE=${POSTGRES_DATABASE}_$(date +"%Y-%m-%dT%H:%M:%SZ").dump
 
 if [ "${POSTGRES_DATABASE}" == "all" ]; then
-  pg_dumpall $POSTGRES_HOST_OPTS -Fc > $SRC_FILE
+  pg_dumpall $POSTGRES_HOST_OPTS -Fc > /home/app/backup/$SRC_FILE
 else
-  pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE -Fc > $SRC_FILE
+  pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE -Fc > /home/app/backup/$SRC_FILE
 fi
 
 
 if [ "${ENCRYPTION_PASSWORD}" != "**None**" ]; then
   >&2 echo "Encrypting ${SRC_FILE}"
   #openssl enc -aes-256-cbc -in $SRC_FILE -out ${SRC_FILE}.enc -k $ENCRYPTION_PASSWORD
-  gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output ${SRC_FILE}.enc --symmetric --cipher-algo AES256 ${SRC_FILE}
+  gpg --batch --pinentry-mode loopback --passphrase $ENCRYPTION_PASSWORD --output /home/app/backup/${SRC_FILE}.enc --symmetric --cipher-algo AES256 /home/app/backup/${SRC_FILE}
   if [ $? != 0 ]; then
     >&2 echo "Error encrypting ${SRC_FILE}"
   fi
-  rm $SRC_FILE
+  rm /home/app/backup/$SRC_FILE
   SRC_FILE="${SRC_FILE}.enc"
   DEST_FILE="${DEST_FILE}.enc"
 fi
 
 echo "Uploading dump to $S3_BUCKET"
 
-cat $SRC_FILE | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$DEST_FILE || exit 2
+cat /home/app/backup/$SRC_FILE | aws $AWS_ARGS s3 cp - s3://$S3_BUCKET/$S3_PREFIX/$DEST_FILE || exit 2
 
 if [ "${DELETE_OLDER_THAN}" != "**None**" ]; then
   >&2 echo "Checking for files older than ${DELETE_OLDER_THAN}"
